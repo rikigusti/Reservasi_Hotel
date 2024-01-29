@@ -6,7 +6,8 @@ import java.util.Queue;
 import java.util.Scanner;
 import java.util.InputMismatchException;
 
-record ReservationData(String nama, String alamat, String ktp, Integer hp, List<Integer> kodeKamar, int lamaSewa) {}
+//record
+record ReservationData(String nama, String alamat, String ktp, String hp, List<Integer> kodeKamar, int lamaSewa) {}
 
 class Room {
     private int roomNumber;
@@ -39,6 +40,7 @@ public class SistemReservasiHotel {
 
     public static void main(String[] args) {
         // initialize room list
+//        LikendList
         for (int i = 1; i <= 2; i++) {
             roomList.add(new Room(i, "Single", false));
         }
@@ -89,57 +91,118 @@ public class SistemReservasiHotel {
         }
     }
 
-    public static void dataKamar() {
-        System.out.println("---------------------------------------------------------");
-        System.out.println("                 ....TYPE KAMAR....                      ");
-        System.out.println("---------------------------------------------------------");
-        System.out.println("NO |    TYPE    |ISI|KETERSEDIAN|          HARGA         ");
-        System.out.println("---------------------------------------------------------");
-        for (Room room : roomList) {
-            System.out.println(room.getRoomNumber() + ". | " + room.getRoomType() + " | " +
-                    (room.isOccupied() ? "Y" : "T") + " | " + (room.isOccupied() ? "T" : "Y") +
-                    " | RP. " + (room.getRoomType().equals("Single") ? "175.000" :
-                    (room.getRoomType().equals("Double") ? "225.000" : "300.000")) + ",- per malam");
+   public static void dataKamar() {
+    System.out.println("---------------------------------------------------------");
+    System.out.println("                 ....TYPE KAMAR....                      ");
+    System.out.println("---------------------------------------------------------");
+    System.out.println("NO |    TYPE    |ISI|KETERSEDIAN|          HARGA         ");
+    System.out.println("---------------------------------------------------------");
+
+    for (Room room : roomList) {
+        System.out.println(room.getRoomNumber() + ". | " + room.getRoomType() + " | " +
+                (room.isOccupied() ? "Y" : "T") + " | " + (room.isOccupied() ? "T" : "Y") +
+                " | RP. " + (room.getRoomType().equals("Single") ? "175.000" :
+                (room.getRoomType().equals("Double") ? "225.000" : "300.000")) + ",- per malam");
+    }
+
+    // Menampilkan informasi kamar yang sudah dipesan
+    System.out.println("\nKamar yang Sudah Dipesan:");
+    for (ReservationData reservation : reservations) {
+        System.out.println("Nama Pemesan: " + reservation.nama());
+        System.out.println("Nomor Kamar : " + reservation.kodeKamar());
+        System.out.println("Lama Sewa   : " + reservation.lamaSewa() + " hari");
+        System.out.println("------------------------------");
+    }
+
+    // Menampilkan informasi kamar yang belum dipesan
+    System.out.println("\nKamar yang Belum Dipesan:");
+    for (Room room : roomList) {
+        if (!room.isOccupied()) {
+            System.out.println("Nomor Kamar: " + room.getRoomNumber());
+            System.out.println("Tipe Kamar : " + room.getRoomType());
+            System.out.println("------------------------------");
         }
-        System.out.println("---------------------------------------------------------");
-        System.out.println("                 ....Reservasi Kamar....                      ");
-        System.out.println("---------------------------------------------------------");
+    }
+
+    System.out.println("---------------------------------------------------------");
+    System.out.println("                 ....DATA KAMAR....                      ");
+    System.out.println("Total Semua Kamar   : " + roomList.size());
+    System.out.println("Total Kamar Kosong  : " + countAvailableRooms());
+    System.out.println("Total Kamar Isi     : " + (roomList.size() - countAvailableRooms()));
+    System.out.println("DATA KAMAR KOSONG   : - Single  : " + countAvailableRoomsByType("Single"));
+    System.out.println("                      - Double  : " + countAvailableRoomsByType("Double"));
+    System.out.println("                      - Suite   : " + countAvailableRoomsByType("Suite"));
+}
+
+
+    private static void dataPenyewa() {
+    Scanner masukan = new Scanner(System.in);
+    System.out.println("---------------------------------------------------------");
+    System.out.println("                      DATA PENYEWA                       ");
+    System.out.println("---------------------------------------------------------");
+
+    // Input Nama
+    String nama = "";
+    boolean inputNamaValid = false;
+    while (!inputNamaValid) {
+        System.out.print("Masukkan Nama Anda        : ");
+        nama = masukan.nextLine();
+        if (nama.matches("^[a-zA-Z\\s]+$")) {
+            inputNamaValid = true;
+        } else {
+            System.out.println("Error: Nama hanya boleh mengandung huruf dan spasi.");
+        }
+    }
+
+    // Input Alamat
+    System.out.print("Masukkan Alamat Anda      : ");
+    String alamat = masukan.nextLine();
+
+    // Input Nomor KTP/SIM
+    String ktp = "";
+    boolean inputKTPValid = false;
+    while (!inputKTPValid) {
+        System.out.print("Masukkan NO KTP/SIM Anda  : ");
+        ktp = masukan.nextLine();
+        if (ktp.matches("^[0-9]+$")) {
+            inputKTPValid = true;
+        } else {
+            System.out.println("Error: Nomor KTP/SIM hanya boleh mengandung angka.");
+        }
+    }
+
+    // Input Nomor Telepon
+    String hp = "";
+        boolean inputHPValid = false;
+        while (!inputHPValid) {
+            System.out.print("Masukkan NO Telepon Anda  : ");
+            hp = masukan.nextLine();
+            if (hp.matches("^[0-9]+$")) {
+                inputHPValid = true;
+            } else {
+                System.out.println("Error: Nomor Telepon hanya boleh mengandung angka.");
+            }
+  }
+
+    boolean inginSewaLagi = true;
+    List<Integer> kodeKamarList = new ArrayList<>();
+
+    while (inginSewaLagi) {
+        System.out.println("\nInformasi Kamar:");
         System.out.println("Total Semua Kamar   : " + roomList.size());
         System.out.println("Total Kamar Kosong  : " + countAvailableRooms());
         System.out.println("Total Kamar Isi     : " + (roomList.size() - countAvailableRooms()));
         System.out.println("DATA KAMAR KOSONG   : - Single  : " + countAvailableRoomsByType("Single"));
         System.out.println("                      - Double  : " + countAvailableRoomsByType("Double"));
         System.out.println("                      - Suite   : " + countAvailableRoomsByType("Suite"));
-    }
 
-    private static void dataPenyewa() {
-        Scanner masukan = new Scanner(System.in);
-        System.out.println("---------------------------------------------------------");
-        System.out.println("                      DATA PENYEWA                       ");
-        System.out.println("---------------------------------------------------------");
-        System.out.print("Masukkan Nama Anda        : ");
-        String nama = masukan.next();
-        System.out.print("Masukkan Alamat Anda      : ");
-        String alamat = masukan.next();
-        System.out.print("Masukkan NO KTP/SIM Anda  : ");
-        String ktp = masukan.next();
-        System.out.print("Masukkan NO Telepon Anda  : ");
-        Integer hp = masukan.nextInt();
+        System.out.print("Pilih kamar  : ");
+        int kodeKamar = masukan.nextInt();
 
-        boolean inginSewaLagi = true;
-        List<Integer> kodeKamarList = new ArrayList<>();
-
-        while (inginSewaLagi) {
-            System.out.println(" PILIH KAMAR : ");
-            System.out.println(" 1. Single  : Rp. 175.000,- per malam");
-            System.out.println(" 2. Double  : Rp. 225.000,- per malam");
-            System.out.println(" 3. Suite   : Rp. 300.000,- per malam");
-            System.out.print("Pilih kode kamar [1/2/3] : ");
-            int kodeKamar = masukan.nextInt();
-
-            // Perbarui status kamar menjadi terisi
-            Room selectedRoom = roomList.stream().filter(room -> room.getRoomNumber() == kodeKamar).findFirst().orElse(null);
-            if (selectedRoom != null && !selectedRoom.isOccupied()) {
+        // Perbarui status kamar menjadi terisi
+        Room selectedRoom = roomList.stream().filter(room -> room.getRoomNumber() == kodeKamar).findFirst().orElse(null);
+        if (selectedRoom != null) {
+            if (!selectedRoom.isOccupied()) {
                 selectedRoom.setOccupied(true);
 
                 // Tambahkan kode kamar ke dalam list
@@ -150,15 +213,27 @@ public class SistemReservasiHotel {
 
                 System.out.println("Kamar berhasil disewa!");
 
+                // Tampilkan informasi kamar yang disewa
+                System.out.println("\nInformasi Kamar yang Disewa:");
+                System.out.println("Nama Pemesan        : " + nama);
+                System.out.println("Nomor Kamar         : " + kodeKamar);
+                System.out.println("Tipe Kamar          : " + selectedRoom.getRoomType());
+                System.out.println("------------------------------");
+
                 // Tanyakan apakah ingin menyewa kamar lagi
                 System.out.print("Ingin menyewa kamar lagi? [Y/T]: ");
                 String jawabanSewaLagi = masukan.next().toUpperCase();
                 inginSewaLagi = jawabanSewaLagi.equals("Y");
             } else {
-                System.out.println("Kamar tidak tersedia atau kode kamar tidak valid.");
+                System.out.println("Kamar dengan nomor " + kodeKamar + " sudah terisi. Pilih nomor kamar yang lain.");
             }
+        } else {
+            System.out.println("Nomor kamar " + kodeKamar + " tidak tersedia. Pilih nomor kamar yang valid.");
         }
     }
+}
+
+
 
    private static void dataTransaksi() {
      Scanner masukan = new Scanner(System.in);
@@ -169,6 +244,7 @@ public class SistemReservasiHotel {
     System.out.println("                      DATA TRANSAKSI                     ");
     System.out.println("---------------------------------------------------------");
     System.out.println("  INPUT DATA PENYEWA                                     ");
+//    Queue
     ReservationData reservationData = reservationQueue.poll();
 
     System.out.println("Nama                : " + reservationData.nama());
@@ -181,35 +257,66 @@ public class SistemReservasiHotel {
 
 List<Integer> kodeKamarList = reservationData.kodeKamar();
 
-for (Integer kodeKamar : kodeKamarList) {
-    Room selectedRoom = roomList.stream().filter(room -> room.getRoomNumber() == kodeKamar).findFirst().orElse(null);
+ for (int i : kodeKamarList) {
+            Room selectedRoom = roomList.stream().filter(room -> room.getRoomNumber() == i).findFirst().orElse(null);
 
-    if (selectedRoom != null) {
-        // Perbarui status kamar menjadi kosong
-        selectedRoom.setOccupied(false);
-
-        if (kodeKamar.equals(1)) {
-            System.out.println("Kamar yang di pesan : Single");
-            System.out.println("Harga Sewa          : Rp. " + single + " per malam");
-        } else if (kodeKamar.equals(2)) {
-            System.out.println("Kamar yang di pesan : Double");
-            System.out.println("Harga Sewa          : Rp. " + db + " per malam");
-        } else if (kodeKamar.equals(3)) {
-            System.out.println("Kamar yang di pesan : Suite");
-            System.out.println("Harga Sewa          : Rp. " + st + " per malam");
-        } else {
-            System.out.println("Kode Yang Di Masukkan Salah");
-            // Tambahkan logika penanganan jika kode kamar tidak valid
+            if (selectedRoom != null) {
+                selectedRoom.setOccupied(false);
+                if (i == 1) {
+                    System.out.println("Kamar yang di pesan : Single");
+                    System.out.println("Harga Sewa          : Rp. " + single + " per malam");
+                    System.out.print("Lama Sewa           : ");
+                    sewa = masukan.nextInt();
+                    reservationData = new ReservationData(reservationData.nama(), reservationData.alamat(),
+                            reservationData.ktp(), reservationData.hp(), kodeKamarList, sewa);
+                    total += sewa * single;
+                } else if (i == 2) {
+                    System.out.println("Kamar yang di pesan : Single");
+                    System.out.println("Harga Sewa          : Rp. " + single + " per malam");
+                    System.out.print("Lama Sewa           : ");
+                    sewa = masukan.nextInt();
+                    reservationData = new ReservationData(reservationData.nama(), reservationData.alamat(),
+                            reservationData.ktp(), reservationData.hp(), kodeKamarList, sewa);
+                    total += sewa * single;
+                } else if (i == 3) {
+                    System.out.println("Kamar yang di pesan : Double");
+                    System.out.println("Harga Sewa          : Rp. " + db + " per malam");
+                    System.out.print("Lama Sewa           : ");
+                    sewa = masukan.nextInt();
+                    reservationData = new ReservationData(reservationData.nama(), reservationData.alamat(),
+                            reservationData.ktp(), reservationData.hp(), kodeKamarList, sewa);
+                    total += sewa * db;
+                }  else if (i == 4) {
+                    System.out.println("Kamar yang di pesan : Double");
+                    System.out.println("Harga Sewa          : Rp. " + db + " per malam");
+                    System.out.print("Lama Sewa           : ");
+                    sewa = masukan.nextInt();
+                    reservationData = new ReservationData(reservationData.nama(), reservationData.alamat(),
+                            reservationData.ktp(), reservationData.hp(), kodeKamarList, sewa);
+                    total += sewa * db;
+                }else if (i == 5) {
+                    System.out.println("Kamar yang di pesan : Suite");
+                    System.out.println("Harga Sewa          : Rp. " + st + " per malam");
+                    System.out.print("Lama Sewa           : ");
+                    sewa = masukan.nextInt();
+                    reservationData = new ReservationData(reservationData.nama(), reservationData.alamat(),
+                            reservationData.ktp(), reservationData.hp(), kodeKamarList, sewa);
+                    total += sewa * st;
+                } else if (i == 6) {
+                    System.out.println("Kamar yang di pesan : Suite");
+                    System.out.println("Harga Sewa          : Rp. " + st + " per malam");
+                    System.out.print("Lama Sewa           : ");
+                    sewa = masukan.nextInt();
+                    reservationData = new ReservationData(reservationData.nama(), reservationData.alamat(),
+                            reservationData.ktp(), reservationData.hp(), kodeKamarList, sewa);
+                    total += sewa * st;
+                }else {
+                    System.out.println("Kode Yang Di Masukkan Salah");
+                }
+            } else {
+                System.out.println("Kamar tidak tersedia atau kode kamar tidak valid.");
+            }
         }
-
-        System.out.print("Lama Sewa           : ");
-        sewa = masukan.nextInt();
-        total += sewa * (kodeKamar.equals(1) ? single : (kodeKamar.equals(2) ? db : st));
-    } else {
-        System.out.println("Kamar tidak tersedia atau kode kamar tidak valid.");
-        // Tambahkan logika penanganan jika kamar tidak tersedia atau kode kamar tidak valid
-    }
-}
 
 // Output total bayar diluar loop
 System.out.println("Total Bayar         : Rp. " + total);
