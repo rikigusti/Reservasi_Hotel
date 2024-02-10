@@ -3,6 +3,7 @@
   <li>Mata Kuliah: Struktur Data</li>
   <li>Dosen Pengampu: <a href="https://github.com/Muhammad-Ikhwan-Fathulloh">Muhammad Ikhwan Fathulloh</a></li>
 </ul>
+
 ## Kelompok
 <ul>
   <li>Kelompok: 7</li>
@@ -14,8 +15,9 @@
     <li>Anggota 2: <a href="https://github.com/Annisasris">Annisa Sri Sya'baniah</a></li>
   </ul>
 </ul>
+
 ## Judul Proyek
-<p>Sitem Aplikasi Reservasi Hotel</p>
+<p>Sistem Aplikasi Reservasi Hotel</p>
 
 ## Penjelasan Proyek
 <p>Jadi di sistem reservasi hotel ini kita bisa melihat tipe kamar serta kamar mana aja yang kosong,
@@ -35,7 +37,7 @@ di perlukan serta bagai mana nantinya kita bertrasaksi pembayaran.</p>
 <ul>
   <li><p>Bayu Bagian Pengerjaan Data Kamar.</p></li>
   <li><p>Riki Bagian Pengerjaan Data Penyewa.</p></li>
-  <li><p>Ica Bagian Pengerjaan Data Trasaksi.</p></li>
+  <li><p>Ica Bagian Pengerjaan Data Transaksi.</p></li>
 </ul>
 
 ## Demo Proyek
