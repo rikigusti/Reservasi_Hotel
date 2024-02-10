@@ -10,7 +10,7 @@
   <li>Anggota:</li>
   <ul>
     <li>Ketua: <a href="https://github.com/rikigusti/">Riki Gusti Fernanda</a></li>
-    <li>Anggota 1: <a href="https://github.com/rikigusti/">Bayu Aji Prayoga</a></li>
+    <li>Anggota 1: <a href="https://github.com/BayuAjiPrayoga">Bayu Aji Prayoga</a></li>
     <li>Anggota 2: <a href="https://github.com/Annisasris">Annisa Sri Sya'baniah</a></li>
   </ul>
 </ul>
